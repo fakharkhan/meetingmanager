@@ -13,18 +13,7 @@ export function Profile({ onMeetingTypeSelect }: ProfileProps) {
   return (
     <div className="flex-1 p-6 space-y-6 h-full flex flex-col">
       <div className="space-y-4">
-        <div className="w-full h-[120px] relative mb-2">
-          <Image
-            src="/uploads/softpyramid-banner.jpeg"
-            alt="SoftPyramid Banner"
-            fill
-            sizes="(max-width: 768px) 100vw, 360px"
-            className="object-contain"
-            priority
-          />
-        </div>
-
-        <div className="flex items-center gap-4 mt-8">
+        <div className="flex items-center gap-4">
           <div className="relative w-16 h-16 rounded-full overflow-hidden ring-2 ring-offset-2 ring-gray-100">
             <Image
               src="/uploads/FZ.png"

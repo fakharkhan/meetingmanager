@@ -1,5 +1,5 @@
 "use client"
-
+import Image from "next/image"
 import { useState } from "react"
 import { Profile } from "@/components/meeting/profile"
 import { Calendar } from "@/components/meeting/calendar"
@@ -15,7 +15,18 @@ export function Manager() {
         <div className={`w-[360px] transition-all duration-500 ${
           selectedMeetingType ? '-translate-x-0' : 'translate-x-[calc(50%-180px)]'
         }`}>
+           
           <Card className="h-[520px]">
+              <div className="w-full h-[120px] relative">
+              <Image
+                src="/uploads/softpyramid-banner.jpeg"
+                alt="SoftPyramid Banner"
+                fill
+                sizes="(max-width: 768px) 100vw, 360px"
+                className="object-contain"
+                priority
+              />
+            </div>
             <Profile onMeetingTypeSelect={setSelectedMeetingType} />
           </Card>
         </div>
