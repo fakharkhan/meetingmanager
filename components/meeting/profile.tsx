@@ -42,7 +42,7 @@ export function Profile({
 
         <div className="space-y-2">
           <label htmlFor="discussion-topic" className="text-sm font-medium text-muted-foreground">
-            We will discuss about
+            We will discuss about <span className="text-red-500">*</span>
           </label>
           <div className="relative">
             <textarea

@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { Phone, Video, Users, ChevronDown } from "lucide-react";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface ContactFormProps {
   selectedMeetingType: "online" | "phone" | "in-person";
@@ -37,31 +39,46 @@ export const ContactForm: React.FC<ContactFormProps> = ({
   const [selectedCountry, setSelectedCountry] = useState(POPULAR_COUNTRY_CODES[3]);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [errors, setErrors] = useState<{
-    discussionTopic?: string;
-    time?: string;
     email?: string;
     phone?: string;
-    meetingType?: string;
   }>({});
   
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const newErrors: typeof errors = {};
 
+    // Clear previous errors
+    setErrors({});
+
+    // Validate all fields first
+    let hasErrors = false;
+
     // Validate meeting type
     if (!selectedMeetingType) {
-      newErrors.meetingType = "Please select a meeting type";
+      toast.error("Please select a meeting type", {
+        position: "top-center",
+        autoClose: 3000,
+      });
+      hasErrors = true;
     }
 
     // Validate discussion topic
-    if (!discussionTopic.trim()) {
-      newErrors.discussionTopic = "Please enter discussion topics";
+    if (!discussionTopic?.trim()) {
+      toast.error("Please enter discussion topics", {
+        position: "top-center",
+        autoClose: 3000,
+      });
+      hasErrors = true;
     }
 
     // Validate time selection
     if (!selectedTime) {
-      newErrors.time = "Please select a time slot";
+      toast.error("Please select a time slot", {
+        position: "top-center",
+        autoClose: 3000,
+      });
+      hasErrors = true;
     }
 
     // Validate email for online meetings
@@ -69,6 +86,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({
       const email = formData.get('email') as string;
       if (!email) {
         newErrors.email = "Email is required for online meetings";
+        hasErrors = true;
       }
     }
 
@@ -77,18 +95,16 @@ export const ContactForm: React.FC<ContactFormProps> = ({
       const phone = formData.get('phone') as string;
       if (!phone) {
         newErrors.phone = "Phone number is required for phone meetings";
+        hasErrors = true;
       }
     }
 
     // If there are any errors, don't submit
-    if (Object.keys(newErrors).length > 0) {
+    if (hasErrors) {
       setErrors(newErrors);
       return;
     }
 
-    // Clear any existing errors
-    setErrors({});
-    
     const submitData = {
       name: formData.get('name') as string,
       discussionTopic,
@@ -102,8 +118,19 @@ export const ContactForm: React.FC<ContactFormProps> = ({
         countryCode: selectedCountry.code
       })
     };
-    
-    onSubmit(submitData);
+
+    try {
+      await onSubmit(submitData);
+      toast.success('Meeting scheduled successfully!', {
+        position: "top-center",
+        autoClose: 3000,
+      });
+    } catch (error) {
+      toast.error('Failed to schedule meeting. Please try again.', {
+        position: "top-center",
+        autoClose: 3000,
+      });
+    }
   };
 
   const getMeetingIcon = () => {
@@ -119,6 +146,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({
 
   return (
     <div className="w-full">
+      <ToastContainer />
       <form className="space-y-6" onSubmit={handleSubmit}>
         {errors.meetingType && (
           <div className="text-sm text-red-500 bg-red-50 p-3 rounded-md">
@@ -126,13 +154,13 @@ export const ContactForm: React.FC<ContactFormProps> = ({
           </div>
         )}
         <div>
-          <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+          <label htmlFor="contact-name" className="block text-sm font-medium text-gray-700">
             Name
           </label>
           <input
             ref={nameInputRef}
             type="text"
-            id="name"
+            id="contact-name"
             name="name"
             className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
             required
@@ -141,12 +169,12 @@ export const ContactForm: React.FC<ContactFormProps> = ({
 
         {selectedMeetingType === "online" && (
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="contact-email" className="block text-sm font-medium text-gray-700">
               Email
             </label>
             <input
               type="email"
-              id="email"
+              id="contact-email"
               name="email"
               className={`mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm ${
                 errors.email ? 'border-red-500' : 'border-gray-300'
@@ -161,7 +189,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({
 
         {selectedMeetingType === "phone" && (
           <div className="space-y-2">
-            <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="contact-phone" className="block text-sm font-medium text-gray-700">
               Phone number
             </label>
             <div className="relative">
@@ -178,7 +206,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({
                 
                 <input
                   type="tel"
-                  id="phone"
+                  id="contact-phone"
                   name="phone"
                   className={`w-full h-[42px] pl-24 pr-4 bg-white border rounded-lg text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-0 transition-shadow ${
                     errors.phone ? 'border-red-500' : 'border-gray-200'
@@ -213,18 +241,6 @@ export const ContactForm: React.FC<ContactFormProps> = ({
                 )}
               </div>
             </div>
-          </div>
-        )}
-
-        {errors.discussionTopic && (
-          <div className="text-sm text-red-500">
-            {errors.discussionTopic}
-          </div>
-        )}
-
-        {errors.time && (
-          <div className="text-sm text-red-500">
-            {errors.time}
           </div>
         )}
 
