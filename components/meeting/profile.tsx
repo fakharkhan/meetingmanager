@@ -47,6 +47,7 @@ export function Profile({
           <div className="relative">
             <textarea
               id="discussion-topic"
+              required
               rows={4}
               value={discussionTopic}
               onChange={(e) => onDiscussionTopicChange(e.target.value)}

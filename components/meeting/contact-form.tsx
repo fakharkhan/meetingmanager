@@ -36,10 +36,58 @@ export const ContactForm: React.FC<ContactFormProps> = ({
 }) => {
   const [selectedCountry, setSelectedCountry] = useState(POPULAR_COUNTRY_CODES[3]);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [errors, setErrors] = useState<{
+    discussionTopic?: string;
+    time?: string;
+    email?: string;
+    phone?: string;
+    meetingType?: string;
+  }>({});
   
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
+    const newErrors: typeof errors = {};
+
+    // Validate meeting type
+    if (!selectedMeetingType) {
+      newErrors.meetingType = "Please select a meeting type";
+    }
+
+    // Validate discussion topic
+    if (!discussionTopic.trim()) {
+      newErrors.discussionTopic = "Please enter discussion topics";
+    }
+
+    // Validate time selection
+    if (!selectedTime) {
+      newErrors.time = "Please select a time slot";
+    }
+
+    // Validate email for online meetings
+    if (selectedMeetingType === 'online') {
+      const email = formData.get('email') as string;
+      if (!email) {
+        newErrors.email = "Email is required for online meetings";
+      }
+    }
+
+    // Validate phone for phone meetings
+    if (selectedMeetingType === 'phone') {
+      const phone = formData.get('phone') as string;
+      if (!phone) {
+        newErrors.phone = "Phone number is required for phone meetings";
+      }
+    }
+
+    // If there are any errors, don't submit
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
+    // Clear any existing errors
+    setErrors({});
     
     const submitData = {
       name: formData.get('name') as string,
@@ -72,6 +120,11 @@ export const ContactForm: React.FC<ContactFormProps> = ({
   return (
     <div className="w-full">
       <form className="space-y-6" onSubmit={handleSubmit}>
+        {errors.meetingType && (
+          <div className="text-sm text-red-500 bg-red-50 p-3 rounded-md">
+            {errors.meetingType}
+          </div>
+        )}
         <div>
           <label htmlFor="name" className="block text-sm font-medium text-gray-700">
             Name
@@ -95,9 +148,14 @@ export const ContactForm: React.FC<ContactFormProps> = ({
               type="email"
               id="email"
               name="email"
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              className={`mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm ${
+                errors.email ? 'border-red-500' : 'border-gray-300'
+              }`}
               required
             />
+            {errors.email && (
+              <p className="mt-1 text-sm text-red-500">{errors.email}</p>
+            )}
           </div>
         )}
 
@@ -122,10 +180,16 @@ export const ContactForm: React.FC<ContactFormProps> = ({
                   type="tel"
                   id="phone"
                   name="phone"
-                  className="w-full h-[42px] pl-24 pr-4 bg-white border border-gray-200 rounded-lg text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-0 transition-shadow"
+                  className={`w-full h-[42px] pl-24 pr-4 bg-white border rounded-lg text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-0 transition-shadow ${
+                    errors.phone ? 'border-red-500' : 'border-gray-200'
+                  }`}
                   placeholder="321 4443901"
                   required
                 />
+
+                {errors.phone && (
+                  <p className="mt-1 text-sm text-red-500">{errors.phone}</p>
+                )}
 
                 {isDropdownOpen && (
                   <div className="absolute z-50 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-lg">
@@ -149,6 +213,18 @@ export const ContactForm: React.FC<ContactFormProps> = ({
                 )}
               </div>
             </div>
+          </div>
+        )}
+
+        {errors.discussionTopic && (
+          <div className="text-sm text-red-500">
+            {errors.discussionTopic}
+          </div>
+        )}
+
+        {errors.time && (
+          <div className="text-sm text-red-500">
+            {errors.time}
           </div>
         )}
 
