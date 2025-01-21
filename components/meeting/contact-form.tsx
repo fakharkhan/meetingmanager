@@ -1,10 +1,22 @@
 import React from "react";
+import { Phone, Video, Users } from "lucide-react";
 
 interface ContactFormProps {
   selectedMeetingType: "online" | "phone" | "in-person";
 }
 
 export const ContactForm: React.FC<ContactFormProps> = ({ selectedMeetingType }) => {
+  const getMeetingIcon = () => {
+    switch (selectedMeetingType) {
+      case "online":
+        return <Video className="w-4 h-4 mr-2" />;
+      case "phone":
+        return <Phone className="w-4 h-4 mr-2" />;
+      case "in-person":
+        return <Users className="w-4 h-4 mr-2" />;
+    }
+  };
+
   return (
     <div className="max-w-md mx-auto p-3 bg-white">
      
@@ -56,6 +68,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({ selectedMeetingType })
           type="submit"
           className="w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
         >
+          {getMeetingIcon()}
           Schedule Meeting
         </button>
       </form>
