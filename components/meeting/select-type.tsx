@@ -22,12 +22,12 @@ export function SelectType({ onSelect }: SelectTypeProps) {
 
   return (
     <div className="space-y-2">
-      <h3 className="text-sm font-medium text-muted-foreground">Meeting Type</h3>
+      <h3 className="text-sm font-medium text-muted-foreground">How we should connect?</h3>
       <div className="flex gap-2">
         <Button
           variant={selectedType === "online" ? "default" : "outline"}
           size="sm"
-          className="flex-1"
+          className={`flex-1 ${selectedType === "online" ? "bg-blue-600 hover:bg-blue-700" : "text-blue-600 hover:bg-blue-50"}`}
           onClick={() => handleSelect("online")}
         >
           <Video className="w-4 h-4 mr-2" />
@@ -36,7 +36,7 @@ export function SelectType({ onSelect }: SelectTypeProps) {
         <Button
           variant={selectedType === "phone" ? "default" : "outline"}
           size="sm"
-          className="flex-1"
+          className={`flex-1 ${selectedType === "phone" ? "bg-blue-600 hover:bg-blue-700" : "text-blue-600 hover:bg-blue-50"}`}
           onClick={() => handleSelect("phone")}
         >
           <Phone className="w-4 h-4 mr-2" />
@@ -45,7 +45,7 @@ export function SelectType({ onSelect }: SelectTypeProps) {
         <Button
           variant={selectedType === "in-person" ? "default" : "outline"}
           size="sm"
-          className="flex-1"
+          className={`flex-1 ${selectedType === "in-person" ? "bg-blue-600 hover:bg-blue-700" : "text-blue-600 hover:bg-blue-50"}`}
           onClick={() => handleSelect("in-person")}
         >
           <Users className="w-4 h-4 mr-2" />

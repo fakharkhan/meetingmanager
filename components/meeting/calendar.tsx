@@ -6,7 +6,7 @@ import { Card } from "@/components/ui/card"
 import { TimeZoneSelect } from "@/components/meeting/time-zone-select"
 import { TimeSlots } from "@/components/meeting/time-slots"
 import { ContactForm } from "@/components/meeting/contact-form"
-import { useState } from "react"
+import { useState, useRef } from "react"
 
 interface CalendarProps {
   selectedDate: string | null
@@ -19,6 +19,7 @@ export function Calendar({ selectedDate, setSelectedDate, selectedMeetingType }:
   const dates = Array.from({ length: 31 }, (_, i) => i + 1)
   const availableDates = [21, 22, 23, 24, 27, 28, 29, 30, 31]
   const [selectedTimeZone, setSelectedTimeZone] = useState("Asia/Karachi")
+  const nameInputRef = useRef<HTMLInputElement>(null)
 
   const getMeetingTypeMessage = (type: "online" | "phone" | "in-person") => {
     switch (type) {
@@ -29,6 +30,12 @@ export function Calendar({ selectedDate, setSelectedDate, selectedMeetingType }:
       case "in-person":
         return "Great, Let me know if you need location details"
     }
+  }
+
+  const handleTimeSelect = () => {
+    setTimeout(() => {
+      nameInputRef.current?.focus()
+    }, 100)
   }
 
   return (
@@ -106,9 +113,13 @@ export function Calendar({ selectedDate, setSelectedDate, selectedMeetingType }:
           <TimeSlots 
             selectedDate={selectedDate} 
             selectedTimeZone={selectedTimeZone}
+            onTimeSelect={handleTimeSelect}
           />
           <div className="h-4"></div>
-          <ContactForm selectedMeetingType={selectedMeetingType} />
+          <ContactForm 
+            selectedMeetingType={selectedMeetingType} 
+            nameInputRef={nameInputRef}
+          />
         </Card>
       </div>
     </div>

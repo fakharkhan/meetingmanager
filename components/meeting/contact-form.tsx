@@ -3,6 +3,7 @@ import { Phone, Video, Users, ChevronDown } from "lucide-react";
 
 interface ContactFormProps {
   selectedMeetingType: "online" | "phone" | "in-person";
+  nameInputRef?: React.RefObject<HTMLInputElement>;
 }
 
 const POPULAR_COUNTRY_CODES = [
@@ -13,7 +14,10 @@ const POPULAR_COUNTRY_CODES = [
   // Add more as needed
 ];
 
-export const ContactForm: React.FC<ContactFormProps> = ({ selectedMeetingType }) => {
+export const ContactForm: React.FC<ContactFormProps> = ({ 
+  selectedMeetingType,
+  nameInputRef 
+}) => {
   const [selectedCountry, setSelectedCountry] = useState(POPULAR_COUNTRY_CODES[3]); // Default to Pakistan
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -37,6 +41,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({ selectedMeetingType })
             Name
           </label>
           <input
+            ref={nameInputRef}
             type="text"
             id="name"
             name="name"
@@ -108,7 +113,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({ selectedMeetingType })
                 )}
               </div>
             </div>
-            <p className="text-xs text-gray-500">We'll send you a text to verify your number</p>
+            
           </div>
         )}
 

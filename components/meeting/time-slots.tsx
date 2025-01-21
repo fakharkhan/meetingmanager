@@ -5,6 +5,7 @@ import { convertTimeToTimeZone } from "@/lib/time-zone-utils"
 interface TimeSlotsProps {
   selectedDate: string | null
   selectedTimeZone: string
+  onTimeSelect?: () => void
 }
 
 const defaultTimeSlots = [
@@ -19,7 +20,7 @@ const defaultTimeSlots = [
   "10:00pm"
 ]
 
-export function TimeSlots({ selectedDate, selectedTimeZone }: TimeSlotsProps) {
+export function TimeSlots({ selectedDate, selectedTimeZone, onTimeSelect }: TimeSlotsProps) {
   const [selectedTime, setSelectedTime] = useState<string | null>(null)
   const [convertedTimeSlots, setConvertedTimeSlots] = useState<string[]>([])
 
@@ -30,8 +31,25 @@ export function TimeSlots({ selectedDate, selectedTimeZone }: TimeSlotsProps) {
         return convertedTime || time; // Fallback to original time if conversion fails
       });
       setConvertedTimeSlots(converted);
+      
+      // Select the first available time slot when time zone changes
+      if (converted.length > 0) {
+        setSelectedTime(converted[0]);
+      }
     }
   }, [selectedTimeZone])
+
+  useEffect(() => {
+    // Select the first available time slot when date is selected
+    if (selectedDate && convertedTimeSlots.length > 0) {
+      setSelectedTime(convertedTimeSlots[0]);
+    }
+  }, [selectedDate, convertedTimeSlots])
+
+  const handleTimeSelect = (time: string) => {
+    setSelectedTime(time);
+    onTimeSelect?.();
+  }
 
   if (!selectedDate) return null
 
@@ -44,7 +62,7 @@ export function TimeSlots({ selectedDate, selectedTimeZone }: TimeSlotsProps) {
         {convertedTimeSlots.map((time, index) => (
           <button
             key={`${index}-${time}`}
-            onClick={() => setSelectedTime(time)}
+            onClick={() => handleTimeSelect(time)}
             className={`w-full py-2 text-center text-sm font-medium rounded-lg border transition-colors ${
               selectedTime === time
                 ? "bg-blue-600 text-white border-blue-600 hover:bg-blue-700"
