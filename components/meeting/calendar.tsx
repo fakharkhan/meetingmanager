@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { TimeZoneSelect } from "@/components/meeting/time-zone-select"
 import { TimeSlots } from "@/components/meeting/time-slots"
+import { ContactForm } from "@/components/meeting/contact-form"
 
 interface CalendarProps {
   selectedDate: string | null
@@ -86,6 +87,8 @@ export function Calendar({ selectedDate, setSelectedDate, selectedMeetingType }:
       }`}>
         <Card className="p-6 h-[497px]">
           <TimeSlots selectedDate={selectedDate} />
+          <div className="h-4"></div>
+          <ContactForm selectedMeetingType={selectedMeetingType} />
         </Card>
       </div>
     </div>

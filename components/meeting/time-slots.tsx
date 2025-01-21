@@ -21,7 +21,7 @@ export function TimeSlots({ selectedDate }: TimeSlotsProps) {
       <h2 className="text-lg font-semibold tracking-tight">
         Tuesday, January {selectedDate}
       </h2>
-      <div className="grid gap-2">
+      <div className="grid grid-cols-3 gap-2">
         {timeSlots.map((time) => (
           <button
             key={time}
