@@ -29,8 +29,8 @@ export function Calendar({ selectedDate, setSelectedDate, selectedMeetingType }:
   }
 
   return (
-    <div className="flex-[2] grid grid-cols-1 md:grid-cols-2 gap-6">
-      <Card className="p-6">
+    <div className="flex items-start gap-2">
+      <Card className="p-6 w-[360px] h-[600px]">
         <div className="space-y-8">
           <h1 className="text-2xl font-semibold tracking-tight text-foreground">Select a Date & Time</h1>
           <div>
@@ -81,12 +81,12 @@ export function Calendar({ selectedDate, setSelectedDate, selectedMeetingType }:
       </Card>
 
       {/* Time Slots Section */}
-      <div className={`h-fit transition-all duration-300 ${selectedDate ? 'opacity-100' : 'opacity-0'}`}>
-        {selectedDate && (
-          <Card className="p-6">
-            <TimeSlots selectedDate={selectedDate} />
-          </Card>
-        )}
+      <div className={`w-[360px] transition-all duration-500 ${
+        selectedDate ? 'translate-x-0 opacity-100' : 'translate-x-[-20px] opacity-0'
+      }`}>
+        <Card className="p-6 h-[600px]">
+          <TimeSlots selectedDate={selectedDate} />
+        </Card>
       </div>
     </div>
   )

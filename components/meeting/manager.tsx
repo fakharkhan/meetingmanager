@@ -3,22 +3,31 @@
 import { useState } from "react"
 import { Profile } from "@/components/meeting/profile"
 import { Calendar } from "@/components/meeting/calendar"
+import { Card } from "@/components/ui/card"
 
 export function Manager() {
   const [selectedDate, setSelectedDate] = useState<string | null>(null)
-  const [selectedMeetingType, setSelectedMeetingType] = useState<"online" | "phone" | "in-person">("online")
+  const [selectedMeetingType, setSelectedMeetingType] = useState<"online" | "phone" | "in-person" | null>(null)
 
   return (
-    <div className="flex flex-col md:flex-row gap-6 max-w-6xl mx-auto p-4 antialiased">
-      {/* Profile Section */}
-      <Profile onMeetingTypeSelect={setSelectedMeetingType} />
+    <div className="fixed inset-0 flex items-center justify-center">
+      <div className="flex items-start gap-2 transition-all duration-500 ease-in-out">
+        <div className={`w-[360px] transition-all duration-500 ${
+          selectedMeetingType ? '-translate-x-0' : 'translate-x-[calc(50%-180px)]'
+        }`}>
+          <Profile onMeetingTypeSelect={setSelectedMeetingType} />
+        </div>
 
-      {/* Calendar Section */}
-      <Calendar
-        selectedDate={selectedDate}
-        setSelectedDate={setSelectedDate}
-        selectedMeetingType={selectedMeetingType}
-      />
+        {selectedMeetingType && (
+          <div className="transition-all duration-500 animate-in slide-in-from-right">
+            <Calendar
+              selectedDate={selectedDate}
+              setSelectedDate={setSelectedDate}
+              selectedMeetingType={selectedMeetingType}
+            />
+          </div>
+        )}
+      </div>
     </div>
   )
 } 

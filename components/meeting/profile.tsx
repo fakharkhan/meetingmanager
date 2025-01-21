@@ -11,7 +11,7 @@ interface ProfileProps {
 
 export function Profile({ onMeetingTypeSelect }: ProfileProps) {
   return (
-    <Card className="flex-1 p-6 space-y-6">
+    <Card className="flex-1 p-2 space-y-6">
       <div className="space-y-4">
         <div className="w-full h-[120px] relative mb-2">
           <Image

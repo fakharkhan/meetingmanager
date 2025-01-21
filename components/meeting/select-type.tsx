@@ -4,18 +4,20 @@ import { useState } from "react"
 import { Phone, Video, Users } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
-type MeetingType = "online" | "phone" | "in-person"
+type MeetingType = "online" | "phone" | "in-person" | null
 
 interface SelectTypeProps {
   onSelect?: (type: MeetingType) => void
 }
 
 export function SelectType({ onSelect }: SelectTypeProps) {
-  const [selectedType, setSelectedType] = useState<MeetingType>("online")
+  const [selectedType, setSelectedType] = useState<MeetingType>(null)
 
   const handleSelect = (type: MeetingType) => {
-    setSelectedType(type)
-    onSelect?.(type)
+    // If clicking the same type, deselect it
+    const newType = selectedType === type ? null : type
+    setSelectedType(newType)
+    onSelect?.(newType)
   }
 
   return (
