@@ -1,101 +1,121 @@
-import Image from "next/image";
+"use client"
 
-export default function Home() {
+import { useState } from "react"
+import Image from "next/image"
+import { ChevronLeft, ChevronRight, Clock, Globe } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Card } from "@/components/ui/card"
+import { TimeZoneSelect } from "@/components/time-zone-select"
+import { TimeSlots } from "@/components/time-slots"
+
+export default function MeetingScheduler() {
+  const [selectedDate, setSelectedDate] = useState<string | null>(null)
+
+  const days = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"]
+  const dates = Array.from({ length: 31 }, (_, i) => i + 1)
+  const availableDates = [21, 22, 23, 24, 27, 28, 29, 30, 31]
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+    <div className="flex flex-col md:flex-row gap-6 max-w-6xl mx-auto p-4 antialiased">
+      {/* Left Section */}
+      <Card className="flex-1 p-6 space-y-6">
+        <div className="space-y-4">
+          <div className="w-full h-[120px] relative mb-2">
             <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+              src="/uploads/softpyramid-banner.jpeg"
+              alt="SoftPyramid Banner"
+              fill
+              className="object-contain"
+              priority
             />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+          </div>
+
+          <div className="flex items-center gap-4 mt-8">
+            <div className="relative w-16 h-16 rounded-full overflow-hidden ring-2 ring-offset-2 ring-gray-100">
+              <Image
+                src="/uploads/FZ.png"
+                alt="Profile"
+                fill
+                className="object-cover"
+              />
+            </div>
+            <div>
+              <div className="text-sm font-medium text-muted-foreground tracking-wide uppercase">CEO</div>
+              <h2 className="text-2xl font-semibold tracking-tight text-foreground">Project Insights</h2>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2 text-muted-foreground">
+            <Clock className="w-5 h-5" />
+            <span className="font-medium">30 min</span>
+          </div>
+
+          <p className="text-muted-foreground leading-7">
+            Stay updated with the latest innovations, project insights, and custom features. Collaborate with our team,
+            discuss tech trends, and ensure seamless integration and quality assurance for your projects.
+          </p>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      </Card>
+
+      {/* Right Section */}
+      <div className="flex-[2] grid grid-cols-1 md:grid-cols-2 gap-6">
+        <Card className="p-6">
+          <div className="space-y-8">
+            <h1 className="text-2xl font-semibold tracking-tight text-foreground">Select a Date & Time</h1>
+
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="text-lg font-semibold tracking-tight">January 2025</div>
+                <div className="flex gap-2">
+                  <Button variant="ghost" size="icon">
+                    <ChevronLeft className="w-4 h-4" />
+                  </Button>
+                  <Button variant="ghost" size="icon" className="bg-blue-50">
+                    <ChevronRight className="w-4 h-4" />
+                  </Button>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-7 gap-2">
+                {days.map((day) => (
+                  <div key={day} className="text-center text-xs font-medium text-muted-foreground py-2">
+                    {day}
+                  </div>
+                ))}
+                {dates.map((date) => (
+                  <button
+                    key={date}
+                    onClick={() => setSelectedDate(date.toString())}
+                    className={`
+                      py-2 rounded-full text-sm font-medium
+                      ${
+                        availableDates.includes(date)
+                          ? "hover:bg-blue-100 text-primary hover:text-primary-foreground transition-colors"
+                          : "text-muted-foreground"
+                      }
+                      ${selectedDate === date.toString() ? "bg-blue-100 text-primary-foreground" : ""}
+                    `}
+                    disabled={!availableDates.includes(date)}
+                  >
+                    {date}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <TimeZoneSelect />
+          </div>
+        </Card>
+
+        {/* Time Slots Section */}
+        <div className="h-fit">
+          {selectedDate && (
+            <Card className="p-6">
+              <TimeSlots selectedDate={selectedDate} />
+            </Card>
+          )}
+        </div>
+      </div>
     </div>
-  );
+  )
 }
