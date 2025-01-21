@@ -30,7 +30,7 @@ export function Calendar({ selectedDate, setSelectedDate, selectedMeetingType }:
 
   return (
     <div className="flex items-start gap-2">
-      <Card className="p-6 w-[360px] h-[600px]">
+      <Card className="p-6 w-[360px] h-[497px]">
         <div className="space-y-8">
           <h1 className="text-2xl font-semibold tracking-tight text-foreground">Select a Date & Time</h1>
           <div>
@@ -49,9 +49,9 @@ export function Calendar({ selectedDate, setSelectedDate, selectedMeetingType }:
               </div>
             </div>
 
-            <div className="grid grid-cols-7 gap-2">
+            <div className="grid grid-cols-7 gap-0">
               {days.map((day) => (
-                <div key={day} className="text-center text-xs font-medium text-muted-foreground py-2">
+                <div key={day} className="text-center text-xs font-medium text-muted-foreground py-1">
                   {day}
                 </div>
               ))}
@@ -60,7 +60,7 @@ export function Calendar({ selectedDate, setSelectedDate, selectedMeetingType }:
                   key={date}
                   onClick={() => setSelectedDate(date.toString())}
                   className={`
-                    py-2 rounded-full text-sm font-medium
+                    py-1 rounded-full text-sm font-medium
                     ${
                       availableDates.includes(date)
                         ? "hover:bg-blue-100 text-primary hover:text-primary-foreground transition-colors"
@@ -84,7 +84,7 @@ export function Calendar({ selectedDate, setSelectedDate, selectedMeetingType }:
       <div className={`w-[360px] transition-all duration-500 ${
         selectedDate ? 'translate-x-0 opacity-100' : 'translate-x-[-20px] opacity-0'
       }`}>
-        <Card className="p-6 h-[600px]">
+        <Card className="p-6 h-[497px]">
           <TimeSlots selectedDate={selectedDate} />
         </Card>
       </div>

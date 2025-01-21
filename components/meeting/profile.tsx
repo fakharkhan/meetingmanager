@@ -18,6 +18,7 @@ export function Profile({ onMeetingTypeSelect }: ProfileProps) {
             src="/uploads/softpyramid-banner.jpeg"
             alt="SoftPyramid Banner"
             fill
+            sizes="(max-width: 768px) 100vw, 360px"
             className="object-contain"
             priority
           />
@@ -29,6 +30,7 @@ export function Profile({ onMeetingTypeSelect }: ProfileProps) {
               src="/uploads/FZ.png"
               alt="Profile"
               fill
+              sizes="64px"
               className="object-cover"
             />
           </div>
