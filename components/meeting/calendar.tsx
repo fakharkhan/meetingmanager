@@ -61,13 +61,22 @@ export function Calendar({ selectedDate, setSelectedDate, selectedMeetingType }:
                   key={date}
                   onClick={() => setSelectedDate(date.toString())}
                   className={`
-                    py-1 rounded-full text-sm font-medium
+                    py-1 rounded-full text-sm font-bold 
                     ${
                       availableDates.includes(date)
                         ? "hover:bg-blue-100 text-primary hover:text-primary-foreground transition-colors"
-                        : "text-muted-foreground"
+                        : "text-muted-foreground opacity-50"
                     }
-                    ${selectedDate === date.toString() ? "bg-blue-100 text-primary-foreground" : ""}
+                    ${
+                      selectedDate === date.toString() 
+                        ? "bg-blue-600 text-white hover:bg-blue-700 font-semibold" 
+                        : ""
+                    }
+                    ${
+                      !availableDates.includes(date) 
+                        ? "cursor-not-allowed" 
+                        : "cursor-pointer"
+                    }
                   `}
                   disabled={!availableDates.includes(date)}
                 >

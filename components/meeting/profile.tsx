@@ -6,7 +6,7 @@ import { Card } from "@/components/ui/card"
 import { SelectType } from "@/components/meeting/select-type"
 
 interface ProfileProps {
-  onMeetingTypeSelect: (type: "online" | "phone" | "in-person") => void
+  onMeetingTypeSelect: (type: "online" | "phone" | "in-person" | null) => void
 }
 
 export function Profile({ onMeetingTypeSelect }: ProfileProps) {
@@ -35,8 +35,8 @@ export function Profile({ onMeetingTypeSelect }: ProfileProps) {
             />
           </div>
           <div>
-            <div className="text-sm font-medium text-muted-foreground tracking-wide uppercase">CEO</div>
-            <h2 className="text-2xl font-semibold tracking-tight text-foreground">Project Insights</h2>
+            <div className="text-sm font-medium text-muted-foreground tracking-wide ">You are scheduling with </div>
+            <h2 className="text-2xl font-semibold tracking-tight text-foreground">Fakhar Zaman Khan</h2>
           </div>
         </div>
 
@@ -45,10 +45,27 @@ export function Profile({ onMeetingTypeSelect }: ProfileProps) {
           <span className="font-medium">30 min</span>
         </div>
 
-        <p className="text-muted-foreground leading-7">
-          Stay updated with the latest innovations, project insights, and custom features. Collaborate with our team,
-          discuss tech trends, and ensure seamless integration and quality assurance for your projects.
-        </p>
+        <div className="space-y-2">
+          <label htmlFor="discussion-topic" className="text-sm font-medium text-muted-foreground">
+            We will discuss about
+          </label>
+          <div className="relative">
+            <textarea
+              id="discussion-topic"
+              rows={4}
+              className="w-full min-h-[80px] p-3 rounded-md border border-input bg-background text-sm"
+              placeholder="Enter discussion topics and agenda points..."
+            />
+            <button 
+              className="absolute bottom-3 right-3 p-1.5 rounded-md hover:bg-gray-100 text-muted-foreground"
+              aria-label="Attach file"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48"/>
+              </svg>
+            </button>
+          </div>
+        </div>
       </div>
       <div>
         {/* Select Meeting Type */}

@@ -1,19 +1,25 @@
 "use client"
+import { useState } from "react"
 
 interface TimeSlotsProps {
   selectedDate: string | null
 }
 
 const timeSlots = [
+  "6:00pm",
+  "6:30pm",
+  "7:00pm",
+  "7:30pm",
   "8:00pm",
   "8:30pm",
   "9:00pm",
   "9:30pm",
-  "10:00pm",
-  "10:30pm"
+  "10:00pm"
 ]
 
 export function TimeSlots({ selectedDate }: TimeSlotsProps) {
+  const [selectedTime, setSelectedTime] = useState<string | null>(null)
+
   if (!selectedDate) return null
 
   return (
@@ -25,7 +31,12 @@ export function TimeSlots({ selectedDate }: TimeSlotsProps) {
         {timeSlots.map((time) => (
           <button
             key={time}
-            className="w-full p-4 text-center text-primary text-sm font-medium rounded-lg border border-border hover:bg-blue-50 hover:border-blue-100 transition-colors"
+            onClick={() => setSelectedTime(time)}
+            className={`w-full py-2 text-center text-sm font-medium rounded-lg border transition-colors ${
+              selectedTime === time
+                ? "bg-blue-600 text-white border-blue-600 hover:bg-blue-700"
+                : "text-primary border-blue-200 hover:bg-blue-50 hover:border-blue-300"
+            }`}
           >
             {time}
           </button>
