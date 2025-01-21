@@ -11,7 +11,7 @@ interface ProfileProps {
 
 export function Profile({ onMeetingTypeSelect }: ProfileProps) {
   return (
-    <Card className="flex-1 p-2 space-y-6">
+    <div className="flex-1 p-6 space-y-6 h-full flex flex-col">
       <div className="space-y-4">
         <div className="w-full h-[120px] relative mb-2">
           <Image
@@ -35,7 +35,7 @@ export function Profile({ onMeetingTypeSelect }: ProfileProps) {
             />
           </div>
           <div>
-            <div className="text-sm font-medium text-muted-foreground tracking-wide ">You are scheduling with </div>
+            <div className="text-sm font-medium text-muted-foreground tracking-wide">You are scheduling with</div>
             <h2 className="text-2xl font-semibold tracking-tight text-foreground">Fakhar Zaman Khan</h2>
           </div>
         </div>
@@ -67,10 +67,10 @@ export function Profile({ onMeetingTypeSelect }: ProfileProps) {
           </div>
         </div>
       </div>
-      <div>
-        {/* Select Meeting Type */}
+      
+      <div className="pb-6">
         <SelectType onSelect={onMeetingTypeSelect} />
       </div>
-    </Card>
+    </div>
   )
 } 

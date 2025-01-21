@@ -1,38 +1,28 @@
 "use client"
 
-import { Globe } from "lucide-react"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
-const timeZones = [
-  { value: "PKT", label: "Pakistan Time (UTC+05:00)", city: "Islamabad" },
-  { value: "MVT", label: "Maldives Time (UTC+05:00)", city: "Male" },
-  { value: "IST", label: "India Standard Time (UTC+05:30)", city: "New Delhi" },
-  { value: "GMT", label: "Greenwich Mean Time (UTC+00:00)", city: "London" },
-  { value: "EST", label: "Eastern Standard Time (UTC-05:00)", city: "New York" },
-  { value: "PST", label: "Pacific Standard Time (UTC-08:00)", city: "Los Angeles" },
-]
+interface TimeZoneSelectProps {
+  className?: string
+}
 
-export function TimeZoneSelect() {
+export function TimeZoneSelect({ className }: TimeZoneSelectProps) {
   return (
-    <div className="space-y-2.5">
-      <div className="text-sm font-medium text-foreground">Time zone</div>
-      <Select defaultValue="PKT">
-        <SelectTrigger className="w-full">
-          <Globe className="w-4 h-4 mr-2" />
-          <SelectValue placeholder="Select timezone" />
+    <div className="space-y-2">
+      <label className="text-sm font-medium text-gray-700">
+        Time zone
+      </label>
+      <Select defaultValue="Asia/Karachi">
+        <SelectTrigger className={`w-full ${className}`}>
+          <SelectValue placeholder="Select time zone" />
         </SelectTrigger>
         <SelectContent>
-          {timeZones.map((timezone) => (
-            <SelectItem key={timezone.value} value={timezone.value}>
-              {timezone.label} - {timezone.city}
-            </SelectItem>
-          ))}
+          <SelectItem value="America/New_York">ET - Eastern Time</SelectItem>
+          <SelectItem value="America/Chicago">CT - Central Time</SelectItem>
+          <SelectItem value="America/Denver">MT - Mountain Time</SelectItem>
+          <SelectItem value="America/Los_Angeles">PT - Pacific Time</SelectItem>
+          <SelectItem value="Asia/Karachi">PKT - Pakistan Time</SelectItem>
+          <SelectItem value="Europe/London">GMT - Greenwich Mean Time</SelectItem>
         </SelectContent>
       </Select>
     </div>

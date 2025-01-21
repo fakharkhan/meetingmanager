@@ -31,7 +31,7 @@ export function Calendar({ selectedDate, setSelectedDate, selectedMeetingType }:
 
   return (
     <div className="flex items-start gap-2">
-      <Card className="p-6 w-[360px] h-[497px]">
+      <Card className="p-6 w-[360px] h-[520px]">
         <div className="space-y-8">
           <h1 className="text-2xl font-semibold tracking-tight text-foreground">Select a Date & Time</h1>
           <div>
@@ -50,7 +50,7 @@ export function Calendar({ selectedDate, setSelectedDate, selectedMeetingType }:
               </div>
             </div>
 
-            <div className="grid grid-cols-7 gap-0">
+            <div className="grid grid-cols-7 gap-1">
               {days.map((day) => (
                 <div key={day} className="text-center text-xs font-medium text-muted-foreground py-1">
                   {day}
@@ -86,7 +86,9 @@ export function Calendar({ selectedDate, setSelectedDate, selectedMeetingType }:
             </div>
           </div>
 
-          <TimeZoneSelect />
+          <div className="w-full">
+            <TimeZoneSelect className="text-sm truncate" />
+          </div>
         </div>
       </Card>
 
@@ -94,7 +96,7 @@ export function Calendar({ selectedDate, setSelectedDate, selectedMeetingType }:
       <div className={`w-[360px] transition-all duration-500 ${
         selectedDate ? 'translate-x-0 opacity-100' : 'translate-x-[-20px] opacity-0'
       }`}>
-        <Card className="p-6 h-[497px]">
+        <Card className="p-6 h-[520px]">
           <TimeSlots selectedDate={selectedDate} />
           <div className="h-4"></div>
           <ContactForm selectedMeetingType={selectedMeetingType} />

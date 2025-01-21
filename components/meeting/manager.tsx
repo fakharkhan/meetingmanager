@@ -15,7 +15,9 @@ export function Manager() {
         <div className={`w-[360px] transition-all duration-500 ${
           selectedMeetingType ? '-translate-x-0' : 'translate-x-[calc(50%-180px)]'
         }`}>
-          <Profile onMeetingTypeSelect={setSelectedMeetingType} />
+          <Card className="h-[520px]">
+            <Profile onMeetingTypeSelect={setSelectedMeetingType} />
+          </Card>
         </div>
 
         {selectedMeetingType && (
