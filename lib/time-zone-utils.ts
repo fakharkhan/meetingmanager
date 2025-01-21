@@ -12,9 +12,9 @@ export function convertTimeToTimeZone(
       throw new Error('Invalid date');
     }
 
-    const options = {
+    const options: Intl.DateTimeFormatOptions = {
       timeZone: toTimeZone,
-      hour: 'numeric',
+      hour: '2-digit',
       minute: '2-digit',
       hour12: true
     };
@@ -44,4 +44,20 @@ function convertTo24Hour(time: string): string {
   }
   
   return `${String(hour24).padStart(2, '0')}:${minute}`;
-} 
+}
+
+export const formatTimeForTimeZone = (date: Date, timeZone: string) => {
+    const options: Intl.DateTimeFormatOptions = {
+        timeZone,
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false
+    };
+
+    const formattedTime = new Intl.DateTimeFormat('en-US', options)
+        .format(date)
+        .toLowerCase()
+        .replace(' ', '');
+
+    return formattedTime;
+}; 

@@ -28,6 +28,13 @@ const POPULAR_COUNTRY_CODES = [
   // Add more as needed
 ];
 
+// Add or update the interface for form errors
+interface FormErrors {
+  email?: string;
+  phone?: string;
+  meetingType?: string;
+}
+
 export const ContactForm: React.FC<ContactFormProps> = ({ 
   selectedMeetingType,
   nameInputRef,
@@ -38,15 +45,12 @@ export const ContactForm: React.FC<ContactFormProps> = ({
 }) => {
   const [selectedCountry, setSelectedCountry] = useState(POPULAR_COUNTRY_CODES[3]);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [errors, setErrors] = useState<{
-    email?: string;
-    phone?: string;
-  }>({});
+  const [errors, setErrors] = useState<FormErrors>({});
   
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-    const newErrors: typeof errors = {};
+    const newErrors: FormErrors = {};
 
     // Clear previous errors
     setErrors({});

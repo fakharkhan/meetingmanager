@@ -61,7 +61,7 @@ function TimeSlotPanel({
         <div className="h-4" />
         <ContactForm 
           selectedMeetingType={selectedMeetingType}
-          nameInputRef={nameInputRef}
+          nameInputRef={nameInputRef as React.RefObject<HTMLInputElement>}
           selectedDate={selectedDate}
           selectedTime={selectedTime || ""}
           discussionTopic={discussionTopic}
