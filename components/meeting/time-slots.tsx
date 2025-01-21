@@ -1,11 +1,13 @@
 "use client"
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { convertTimeToTimeZone } from "@/lib/time-zone-utils"
 
 interface TimeSlotsProps {
   selectedDate: string | null
+  selectedTimeZone: string
 }
 
-const timeSlots = [
+const defaultTimeSlots = [
   "6:00pm",
   "6:30pm",
   "7:00pm",
@@ -17,8 +19,19 @@ const timeSlots = [
   "10:00pm"
 ]
 
-export function TimeSlots({ selectedDate }: TimeSlotsProps) {
+export function TimeSlots({ selectedDate, selectedTimeZone }: TimeSlotsProps) {
   const [selectedTime, setSelectedTime] = useState<string | null>(null)
+  const [convertedTimeSlots, setConvertedTimeSlots] = useState<string[]>([])
+
+  useEffect(() => {
+    if (selectedTimeZone) {
+      const converted = defaultTimeSlots.map(time => {
+        const convertedTime = convertTimeToTimeZone(time, "Asia/Karachi", selectedTimeZone);
+        return convertedTime || time; // Fallback to original time if conversion fails
+      });
+      setConvertedTimeSlots(converted);
+    }
+  }, [selectedTimeZone])
 
   if (!selectedDate) return null
 
@@ -28,9 +41,9 @@ export function TimeSlots({ selectedDate }: TimeSlotsProps) {
         Tuesday, January {selectedDate}
       </h2>
       <div className="grid grid-cols-3 gap-2">
-        {timeSlots.map((time) => (
+        {convertedTimeSlots.map((time, index) => (
           <button
-            key={time}
+            key={`${index}-${time}`}
             onClick={() => setSelectedTime(time)}
             className={`w-full py-2 text-center text-sm font-medium rounded-lg border transition-colors ${
               selectedTime === time

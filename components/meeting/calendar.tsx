@@ -6,6 +6,7 @@ import { Card } from "@/components/ui/card"
 import { TimeZoneSelect } from "@/components/meeting/time-zone-select"
 import { TimeSlots } from "@/components/meeting/time-slots"
 import { ContactForm } from "@/components/meeting/contact-form"
+import { useState } from "react"
 
 interface CalendarProps {
   selectedDate: string | null
@@ -17,6 +18,7 @@ export function Calendar({ selectedDate, setSelectedDate, selectedMeetingType }:
   const days = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"]
   const dates = Array.from({ length: 31 }, (_, i) => i + 1)
   const availableDates = [21, 22, 23, 24, 27, 28, 29, 30, 31]
+  const [selectedTimeZone, setSelectedTimeZone] = useState("Asia/Karachi")
 
   const getMeetingTypeMessage = (type: "online" | "phone" | "in-person") => {
     switch (type) {
@@ -87,7 +89,11 @@ export function Calendar({ selectedDate, setSelectedDate, selectedMeetingType }:
           </div>
 
           <div className="w-full">
-            <TimeZoneSelect className="text-sm truncate" />
+            <TimeZoneSelect 
+              className="text-sm truncate" 
+              value={selectedTimeZone}
+              onChange={setSelectedTimeZone}
+            />
           </div>
         </div>
       </Card>
@@ -97,7 +103,10 @@ export function Calendar({ selectedDate, setSelectedDate, selectedMeetingType }:
         selectedDate ? 'translate-x-0 opacity-100' : 'translate-x-[-20px] opacity-0'
       }`}>
         <Card className="p-6 h-[520px]">
-          <TimeSlots selectedDate={selectedDate} />
+          <TimeSlots 
+            selectedDate={selectedDate} 
+            selectedTimeZone={selectedTimeZone}
+          />
           <div className="h-4"></div>
           <ContactForm selectedMeetingType={selectedMeetingType} />
         </Card>
