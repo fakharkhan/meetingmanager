@@ -33,8 +33,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({
   };
 
   return (
-    <div className="max-w-md mx-auto p-3 bg-white">
-     
+    <div className="w-full">
       <form className="space-y-6">
         <div>
           <label htmlFor="name" className="block text-sm font-medium text-gray-700">
@@ -92,7 +91,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({
                 />
 
                 {isDropdownOpen && (
-                  <div className="absolute z-50 mt-1 w-72 bg-white border border-gray-200 rounded-lg shadow-lg">
+                  <div className="absolute z-50 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-lg">
                     <ul className="py-2 max-h-[280px] overflow-auto">
                       {POPULAR_COUNTRY_CODES.map((country) => (
                         <li
@@ -113,7 +112,6 @@ export const ContactForm: React.FC<ContactFormProps> = ({
                 )}
               </div>
             </div>
-            
           </div>
         )}
 
