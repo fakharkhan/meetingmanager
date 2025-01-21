@@ -1,20 +1,24 @@
 import { ChevronLeft, ChevronRight } from "lucide-react"
 
-type PanelType = 'profile' | 'calendar' | 'timeSlots'
+type PanelType = 'profile' | 'calendar' | 'timeSlots' | 'confirmation'
 
 interface NavigationArrowsProps {
   onNext?: () => void
   onPrev?: () => void
   activePanel: PanelType
   canGoNext: boolean
+  showNavigation?: boolean
 }
 
 export function NavigationArrows({ 
   onNext, 
   onPrev, 
   activePanel,
-  canGoNext
+  canGoNext,
+  showNavigation = true
 }: NavigationArrowsProps) {
+  if (!showNavigation) return null
+
   return (
     <div className="fixed bottom-8 left-0 right-0 flex justify-center z-50 md:hidden">
       {activePanel === 'profile' && canGoNext && (

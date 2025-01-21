@@ -7,9 +7,10 @@ import { Card } from "@/components/ui/card"
 import { TimeSlots } from "@/components/meeting/time-slots"
 import { ContactForm } from "@/components/meeting/contact-form"
 import { NavigationArrows } from "@/components/meeting/navigation"
+import { ConfirmationPanel } from "@/components/meeting/confirmation-panel"
 
 type MeetingType = "online" | "phone" | "in-person" | null
-type PanelType = 'profile' | 'calendar' | 'timeSlots'
+type PanelType = 'profile' | 'calendar' | 'timeSlots' | 'confirmation'
 
 interface PanelRenderProps {
   panelType: PanelType
@@ -21,21 +22,28 @@ interface TimeSlotPanelProps {
   selectedTimeZone: string
   selectedMeetingType: Exclude<MeetingType, null>
   onBack: () => void
+  discussionTopic: string
+  onSubmit: (formData: {
+    name: string
+    email?: string
+    phone?: string
+    countryCode?: string
+    discussionTopic: string
+    date: string
+    time: string
+  }) => void
 }
 
 function TimeSlotPanel({ 
   selectedDate, 
   selectedTimeZone,
   selectedMeetingType,
-  onBack
+  onBack,
+  discussionTopic,
+  onSubmit
 }: TimeSlotPanelProps) {
   const nameInputRef = useRef<HTMLInputElement>(null)
-
-  const handleTimeSelect = () => {
-    setTimeout(() => {
-      nameInputRef.current?.focus()
-    }, 100)
-  }
+  const [selectedTime, setSelectedTime] = useState<string | null>(null)
 
   return (
     <div className="flex flex-col h-full">
@@ -43,12 +51,21 @@ function TimeSlotPanel({
         <TimeSlots 
           selectedDate={selectedDate} 
           selectedTimeZone={selectedTimeZone}
-          onTimeSelect={handleTimeSelect}
+          onTimeSelect={(time) => {
+            setSelectedTime(time)
+            setTimeout(() => {
+              nameInputRef.current?.focus()
+            }, 100)
+          }}
         />
         <div className="h-4" />
         <ContactForm 
-          selectedMeetingType={selectedMeetingType} 
+          selectedMeetingType={selectedMeetingType}
           nameInputRef={nameInputRef}
+          selectedDate={selectedDate}
+          selectedTime={selectedTime || ""}
+          discussionTopic={discussionTopic}
+          onSubmit={onSubmit}
         />
       </div>
     </div>
@@ -60,7 +77,17 @@ export function Manager() {
   const [selectedMeetingType, setSelectedMeetingType] = useState<MeetingType>(null)
   const [activePanel, setActivePanel] = useState<PanelType>('profile')
   const [selectedTimeZone, setSelectedTimeZone] = useState("Asia/Karachi")
+  const [discussionTopic, setDiscussionTopic] = useState("")
   const containerRef = useRef<HTMLDivElement>(null)
+  const [submittedData, setSubmittedData] = useState<{
+    name: string
+    email?: string
+    phone?: string
+    countryCode?: string
+    discussionTopic: string
+    date: string
+    time: string
+  } | null>(null)
 
   // Update active panel based on selections
   useEffect(() => {
@@ -114,10 +141,40 @@ export function Manager() {
     }
   }
 
+  const handleFormSubmit = async (formData: {
+    name: string
+    email?: string
+    phone?: string
+    countryCode?: string
+    discussionTopic: string
+    date: string
+    time: string
+  }) => {
+    try {
+      // Here you would typically send the data to your backend
+      console.log('Form submitted with data:', formData)
+      
+      // Store the submitted data
+      setSubmittedData(formData)
+      
+      // Move to confirmation panel
+      setActivePanel('confirmation')
+      
+      // Example API call:
+      // await fetch('/api/schedule-meeting', {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify(formData)
+      // })
+    } catch (error) {
+      console.error('Error submitting form:', error)
+    }
+  }
+
   const renderPanel = ({ panelType, isMobile = false }: PanelRenderProps) => {
     const cardClassName = isMobile 
       ? "w-full h-full rounded-none shadow-none"
-      : "h-[520px] transition-shadow duration-200";
+      : "h-[520px] transition-shadow duration-200"
 
     switch (panelType) {
       case 'profile':
@@ -133,7 +190,11 @@ export function Manager() {
                 priority
               />
             </div>
-            <Profile onMeetingTypeSelect={setSelectedMeetingType} />
+            <Profile 
+              onMeetingTypeSelect={setSelectedMeetingType}
+              discussionTopic={discussionTopic}
+              onDiscussionTopicChange={setDiscussionTopic}
+            />
           </Card>
         );
 
@@ -160,9 +221,23 @@ export function Manager() {
               selectedTimeZone={selectedTimeZone}
               selectedMeetingType={selectedMeetingType}
               onBack={() => setSelectedDate(null)}
+              discussionTopic={discussionTopic}
+              onSubmit={handleFormSubmit}
             />
           </Card>
         );
+
+      case 'confirmation':
+        if (!submittedData || !selectedMeetingType) return null
+        return (
+          <Card className={cardClassName}>
+            <ConfirmationPanel
+              formData={submittedData}
+              meetingType={selectedMeetingType}
+              selectedTimeZone={selectedTimeZone}
+            />
+          </Card>
+        )
     }
   };
 
@@ -183,15 +258,19 @@ export function Manager() {
               (activePanel === 'profile' && selectedMeetingType !== null) ||
               (activePanel === 'calendar' && selectedDate !== null)
             }
+            showNavigation={activePanel !== 'confirmation'}
           />
 
           <div 
             className="absolute inset-0 flex transition-transform duration-300"
             style={{ 
-              transform: `translateX(${
-                activePanel === 'profile' ? '0' : 
-                activePanel === 'calendar' ? '-100%' : '-200%'
-              })`
+              transform: activePanel === 'confirmation' 
+                ? 'translateX(-300%)' 
+                : `translateX(${
+                    activePanel === 'profile' ? '0' : 
+                    activePanel === 'calendar' ? '-100%' : 
+                    activePanel === 'timeSlots' ? '-200%' : '-300%'
+                  })`
             }}
           >
             <div className="min-w-full min-h-screen flex items-start pt-16">
@@ -204,6 +283,9 @@ export function Manager() {
               <div className="min-w-full h-[85vh] flex-shrink-0">
                 {renderPanel({ panelType: 'timeSlots', isMobile: true })}
               </div>
+              <div className="min-w-full h-[85vh] flex-shrink-0">
+                {renderPanel({ panelType: 'confirmation', isMobile: true })}
+              </div>
             </div>
           </div>
         </div>
@@ -212,6 +294,7 @@ export function Manager() {
         <div className="hidden md:flex items-start justify-center gap-4 transition-all duration-500 ease-in-out">
           {/* Profile Panel */}
           <div className={`w-[360px] transition-all duration-500 ${
+            activePanel === 'confirmation' ? 'hidden' :
             selectedMeetingType ? '' : 'flex justify-center'
           }`}>
             {renderPanel({ panelType: 'profile' })}
@@ -219,6 +302,7 @@ export function Manager() {
 
           {/* Calendar Panel */}
           <div className={`w-[360px] transition-all duration-500 ${
+            activePanel === 'confirmation' ? 'hidden' :
             selectedMeetingType 
               ? 'opacity-100 scale-100' 
               : 'opacity-0 scale-95 pointer-events-none absolute'
@@ -228,11 +312,21 @@ export function Manager() {
 
           {/* Time Slots Panel */}
           <div className={`w-[360px] transition-all duration-500 ${
+            activePanel === 'confirmation' ? 'hidden' :
             selectedDate && selectedMeetingType 
               ? 'opacity-100 scale-100' 
               : 'opacity-0 scale-95 pointer-events-none absolute'
           }`}>
             {renderPanel({ panelType: 'timeSlots' })}
+          </div>
+
+          {/* Confirmation Panel */}
+          <div className={`w-[360px] transition-all duration-500 ${
+            activePanel === 'confirmation' 
+              ? 'opacity-100 scale-100' 
+              : 'opacity-0 scale-95 pointer-events-none absolute'
+          }`}>
+            {renderPanel({ panelType: 'confirmation' })}
           </div>
         </div>
       </div>

@@ -4,6 +4,18 @@ import { Phone, Video, Users, ChevronDown } from "lucide-react";
 interface ContactFormProps {
   selectedMeetingType: "online" | "phone" | "in-person";
   nameInputRef?: React.RefObject<HTMLInputElement>;
+  selectedDate: string;
+  selectedTime: string;
+  discussionTopic: string;
+  onSubmit: (formData: {
+    name: string;
+    email?: string;
+    phone?: string;
+    countryCode?: string;
+    discussionTopic: string;
+    date: string;
+    time: string;
+  }) => void;
 }
 
 const POPULAR_COUNTRY_CODES = [
@@ -16,10 +28,35 @@ const POPULAR_COUNTRY_CODES = [
 
 export const ContactForm: React.FC<ContactFormProps> = ({ 
   selectedMeetingType,
-  nameInputRef 
+  nameInputRef,
+  selectedDate,
+  selectedTime,
+  discussionTopic,
+  onSubmit
 }) => {
-  const [selectedCountry, setSelectedCountry] = useState(POPULAR_COUNTRY_CODES[3]); // Default to Pakistan
+  const [selectedCountry, setSelectedCountry] = useState(POPULAR_COUNTRY_CODES[3]);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    
+    const submitData = {
+      name: formData.get('name') as string,
+      discussionTopic,
+      date: selectedDate,
+      time: selectedTime,
+      ...(selectedMeetingType === 'online' && {
+        email: formData.get('email') as string
+      }),
+      ...(selectedMeetingType === 'phone' && {
+        phone: formData.get('phone') as string,
+        countryCode: selectedCountry.code
+      })
+    };
+    
+    onSubmit(submitData);
+  };
 
   const getMeetingIcon = () => {
     switch (selectedMeetingType) {
@@ -34,7 +71,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({
 
   return (
     <div className="w-full">
-      <form className="space-y-6">
+      <form className="space-y-6" onSubmit={handleSubmit}>
         <div>
           <label htmlFor="name" className="block text-sm font-medium text-gray-700">
             Name

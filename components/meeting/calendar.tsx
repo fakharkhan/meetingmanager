@@ -4,6 +4,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { TimeZoneSelect } from "@/components/meeting/time-zone-select"
 import { useState } from "react"
+import { format } from "date-fns"
 
 interface CalendarProps {
   selectedDate: string | null
@@ -33,6 +34,12 @@ export function Calendar({
       case "in-person":
         return "Great, Let me know if you need location details"
     }
+  }
+
+  const handleDateSelect = (date: number) => {
+    const fullDate = new Date(2025, 0, date)
+    const formattedDate = format(fullDate, "EEEE, MMMM d, yyyy")
+    setSelectedDate(formattedDate)
   }
 
   return (
@@ -65,7 +72,7 @@ export function Calendar({
             {dates.map((date) => (
               <button
                 key={date}
-                onClick={() => setSelectedDate(date.toString())}
+                onClick={() => handleDateSelect(date)}
                 className={`
                   py-1 rounded-full text-sm font-bold 
                   ${
@@ -74,7 +81,7 @@ export function Calendar({
                       : "text-muted-foreground opacity-50"
                   }
                   ${
-                    selectedDate === date.toString() 
+                    selectedDate === format(new Date(2025, 0, date), "EEEE, MMMM d, yyyy")
                       ? "bg-blue-600 text-white hover:bg-blue-700 font-semibold" 
                       : ""
                   }

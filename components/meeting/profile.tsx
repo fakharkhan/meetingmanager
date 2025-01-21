@@ -7,9 +7,15 @@ import { SelectType } from "@/components/meeting/select-type"
 
 interface ProfileProps {
   onMeetingTypeSelect: (type: "online" | "phone" | "in-person" | null) => void
+  discussionTopic: string
+  onDiscussionTopicChange: (topic: string) => void
 }
 
-export function Profile({ onMeetingTypeSelect }: ProfileProps) {
+export function Profile({ 
+  onMeetingTypeSelect, 
+  discussionTopic,
+  onDiscussionTopicChange 
+}: ProfileProps) {
   return (
     <div className="flex-1 p-6 space-y-6 h-full flex flex-col">
       <div className="space-y-4">
@@ -42,6 +48,8 @@ export function Profile({ onMeetingTypeSelect }: ProfileProps) {
             <textarea
               id="discussion-topic"
               rows={4}
+              value={discussionTopic}
+              onChange={(e) => onDiscussionTopicChange(e.target.value)}
               className="w-full min-h-[80px] p-3 rounded-md border border-input bg-background text-sm"
               placeholder="Enter discussion topics and agenda points..."
             />
